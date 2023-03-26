@@ -1,14 +1,16 @@
 """Базовый UI-тест"""
-import pytest
-import brotli
 import json
 import time
+
+import brotli
+import pytest
+
 from locators_for_ui.common_objects import ResponseSection, RequestSendingSection
 
 
 class BaseUi:
     driver = None
-    button_label = None
+    button_id = None
     resource_name = None
 
     @pytest.fixture(scope='module')
@@ -26,7 +28,7 @@ class BaseUi:
         """Жмём на конпку интересующего запроса"""
 
         reg_page = RequestSendingSection(driver)
-        reg_page.send_request(button_label=self.button_label)
+        reg_page.send_request(button_id=self.button_id)
         time.sleep(1)
         reg_page.wait_for_spinner_tobe_hidden()
 

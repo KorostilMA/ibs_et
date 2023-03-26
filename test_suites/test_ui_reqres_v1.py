@@ -3,60 +3,75 @@ from reqres_framework.ui_framework import BaseUi
 
 
 class TestGetUserList(BaseUi):
-    button_label = ' List users '
+    button_id = 'users'
     resource_name = 'users'
 
 
 class TestGetSingleUser(BaseUi):
-    button_label = ' Single user '
+    button_id = 'users-single'
     resource_name = 'users'
 
 
 class TestSingleUserNotFound(BaseUi):
-    button_label = ' Single user not found '
+    button_id = 'users-single-not-found'
     resource_name = 'users'
 
 
 class TestGetListResource(BaseUi):
-    button_label = ' List <resource> '
+    button_id = 'unknown'
     resource_name = 'unknown'
 
 
 class TestGetSingleResource(BaseUi):
-    button_label = ' Single <resource> '
+    button_id = 'unknown-single'
     resource_name = 'unknown'
 
 
+class TestGetSingleResourceNotFound(BaseUi):
+    button_id = 'unknown-single-not-found'
+    resource_name = 'unknown'
+
+
+class TestCreateUser(BaseUi):
+    button_id = 'post'
+    resource_name = 'users'
+
+
+class TestUpdatePutUser(BaseUi):
+    button_id = 'put'
+    resource_name = 'users'
+
+
+class TestUpdatePatchUser(BaseUi):
+    button_id = 'patch'
+    resource_name = 'users'
+
+
 class TestDeleteUser(BaseUi):
-    button_label = ' Delete '
+    button_id = 'delete'
     resource_name = 'users'
 
 
 class TestRegisterSuccessful(BaseUi):
-    button_label = ' Register - successful '
+    button_id = 'register-successful'
     resource_name = 'register'
 
 
 class TestRegisterUnSuccessful(BaseUi):
-    button_label = ' Register - unsuccessful '
+    button_id = 'register-unsuccessful'
     resource_name = 'register'
 
 
 class TestLoginSuccessful(BaseUi):
-    button_label = ' Login - successful '
+    button_id = 'login-successful'
     resource_name = 'login'
 
 
 class TestLoginUnSuccessful(BaseUi):
-    button_label = ' Login - unsuccessful '
+    button_id = 'login-unsuccessful'
     resource_name = 'login'
 
 
-class TestCreateUser(BaseUi):
-    button_label = ' Create '
-    resource_name = 'users'
-
-
 class TestDelayedResponse(BaseUi):
-    button_label = ' Delayed response '
+    button_id = 'delay'
     resource_name = 'users'

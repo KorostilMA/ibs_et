@@ -40,10 +40,10 @@ class RequestSendingSection:
         sp_locator = '.spinner[hidden="true"]'
         WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, sp_locator)))
 
-    def send_request(self, button_label):
+    def send_request(self, button_id):
         """Отправляем запрос через клик по соответствующей кнопке"""
 
-        button = self.driver.find_element(By.XPATH, f"//*[.='{button_label}']")
+        button = self.driver.find_element(By.CSS_SELECTOR, f'[data-id="{button_id}"]')
         ActionChains(self.driver).move_to_element(button).perform()
         button.click()
 
