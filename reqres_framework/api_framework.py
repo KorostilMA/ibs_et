@@ -8,6 +8,8 @@ class RESTResource:
     resource_fields = None
     existent_resource_id = None
     non_existent_resource_id = None
+    create_resource_data = None
+    update_resource_data = None
 
     @pytest.fixture(autouse=True)
     def setup(self, base_url):
@@ -29,7 +31,7 @@ class RESTResource:
         assert json_response['total_pages'] >= 0
         if json_response['total'] > json_response['per_page']:
             assert len(json_response['data']) == json_response['per_page']
-        assert set(json_response['data']) == self.resource_fields
+        assert set(json_response['data'][0].keys()) == self.resource_fields
 
     def test_get_single(self):
         response = requests.get(f'{self.url}/{self.existent_resource_id}')
@@ -44,21 +46,26 @@ class RESTResource:
         assert response.status_code == HTTPStatus.NOT_FOUND
 
     def test_create(self):
-        response = requests.post(self.url)
+        response = requests.post(self.url, data=self.create_resource_data)
+
         assert response.status_code == HTTPStatus.CREATED
+        assert self.create_resource_data.items() <= response.json().items()
 
     def test_put_update(self):
-        # нужно написать, не успеваю
-        pass
+        response = requests.put(f'{self.url}/{self.existent_resource_id}', data=self.update_resource_data)
+
+        assert response.status_code == HTTPStatus.OK
+        assert self.update_resource_data.items() <= response.json().items()
 
     def test_put_update_not_found(self):
         response = requests.put(f'{self.url}/{self.non_existent_resource_id}')
         assert response.status_code == HTTPStatus.NOT_FOUND
 
     def test_patch_update(self):
-        # нужно написать, не успеваю
-        pass
+        response = requests.patch(f'{self.url}/{self.existent_resource_id}', data=self.update_resource_data)
 
+        assert response.status_code == HTTPStatus.OK
+        assert self.update_resource_data.items() <= response.json().items()
     def test_patch_update_not_found(self):
         response = requests.patch(f'{self.url}/{self.non_existent_resource_id}')
         assert response.status_code == HTTPStatus.NOT_FOUND
