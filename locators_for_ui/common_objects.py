@@ -2,6 +2,8 @@
 
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.wait import WebDriverWait
 
 
 class ResponseSection:
@@ -26,6 +28,12 @@ class RequestSendingSection:
         self.driver = driver
         self.successful_register_btn = driver.find_element(By.CSS_SELECTOR, '[data-id="register-successful"]')
         self.unsuccessful_register_btn = driver.find_element(By.CSS_SELECTOR, '[data-id="register-unsuccessful"]')
+        self.spinner_has_stopped = driver.find_element(By.CSS_SELECTOR, '.spinner[hidden="true"]')
+
+    def wait_for_spinner_tobe_hidden(self):
+
+        sp_locator = '.spinner[hidden="true"]'
+        WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, sp_locator)))
 
     def send_request(self, button_label):
 

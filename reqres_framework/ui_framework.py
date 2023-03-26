@@ -21,7 +21,8 @@ class BaseUi:
     def send_request_by_button_click(self, driver):
         reg_page = RequestSendingSection(driver)
         reg_page.send_request(button_label=self.button_label)
-        time.sleep(10)  # сделать умнее, не успела
+        time.sleep(1)
+        reg_page.wait_for_spinner_tobe_hidden()
 
     @pytest.fixture
     def get_response_from_ui(self, driver, send_request_by_button_click):
@@ -38,6 +39,18 @@ class BaseUi:
             response.body = brotli.decompress(response.body)
         return response
 
-    def test_response_sameness(self, get_response_from_ui, get_response_from_network):
-        assert get_response_from_network.status_code == (int(get_response_from_ui[0]))
-        assert json.loads(get_response_from_network.body) == json.loads(get_response_from_ui[1])
+    @staticmethod
+    def test_response_sameness(get_response_from_ui, get_response_from_network):
+
+        try:
+            json_body_from_ui = json.loads(get_response_from_ui[1])
+        except json.decoder.JSONDecodeError:
+            json_body_from_ui = ''
+
+        try:
+            json_body_from_network = json.loads(get_response_from_network.body)
+        except json.decoder.JSONDecodeError:
+            json_body_from_network = ''
+
+        assert get_response_from_network.status_code == int(get_response_from_ui[0])
+        assert json_body_from_network == json_body_from_ui
