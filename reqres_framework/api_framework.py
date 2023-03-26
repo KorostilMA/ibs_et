@@ -1,3 +1,4 @@
+"""Базовый класс тестирования REST API"""
 import pytest
 import requests
 from http import HTTPStatus

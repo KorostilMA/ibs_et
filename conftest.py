@@ -24,6 +24,9 @@ def base_url(config):
 
 @pytest.fixture(scope='session')
 def config_browser(config):
+    """Зачин на то, что тесты бубут работать в разных браузерах.
+    Пока тесты работают только в Chrome"""
+
     if 'browser' not in config:
         raise Exception('The config file does not contain "browser"')
     elif config['browser'] not in SUPPORTED_BROWSERS:
@@ -39,6 +42,9 @@ def config_wait_time(config):
 
 @pytest.fixture(scope='session')
 def browser_driver(config_browser, config_wait_time):
+    """Задаём опции для открытия Chrome,
+    возвращаем driver который нужен фикстурам, где есть поиск web-элементов"""
+
     if config_browser == 'chrome':
         chrome_options = ChromeOptions()  #
         chrome_options.add_argument("--disable-extensions")

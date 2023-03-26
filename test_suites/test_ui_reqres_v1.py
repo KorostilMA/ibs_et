@@ -1,3 +1,4 @@
+"""UI-Тесты для каждой кнопки из раздела Give It A Try"""
 from reqres_framework.ui_framework import BaseUi
 
 

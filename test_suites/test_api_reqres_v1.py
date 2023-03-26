@@ -1,9 +1,12 @@
+"""Тестирование конкретных ресурсов раздела Give It A Try сайта reqres"""
 from http import HTTPStatus
 import requests
 from reqres_framework.api_framework import RESTResource
 
 
 class TestUsersResource(RESTResource):
+    """Тестирование ресурса users CRUD"""
+
     resource_name = 'users'
     resource_fields = {'id', 'email', 'first_name', 'last_name', 'avatar'}
     existent_resource_id = 2
@@ -13,6 +16,8 @@ class TestUsersResource(RESTResource):
 
 
 class TestUnknownResource(RESTResource):
+    """Тестирование ресурса unknown CRUD"""
+
     resource_name = 'unknown'
     resource_fields = {'id', 'name', 'year', 'color', 'pantone_value'}
     existent_resource_id = 2
@@ -24,6 +29,7 @@ class TestUnknownResource(RESTResource):
 
 
 def test_login_successful(base_url):
+    """Проверяем авторизацию"""
 
     url = f'{base_url}/api/login'
     response = requests.post(url=url, data={'email': 'eve.holt@reqres.in','password': 'cityslicka'})
@@ -31,7 +37,9 @@ def test_login_successful(base_url):
     assert response.status_code == HTTPStatus.OK
     assert 'token' in response.json()
 
+
 def test_login_unsuccessful(base_url):
+    """Проверяем авторизацию"""
 
     url = f'{base_url}/api/login'
     response = requests.post(url=url, data={'email': 'eve.holt@reqres.in'})
@@ -41,6 +49,7 @@ def test_login_unsuccessful(base_url):
 
 
 def test_register_successful(base_url):
+    """Проверяем регистрацию"""
 
     url = f'{base_url}/api/register'
     response = requests.post(url=url, data={'email': 'eve.holt@reqres.in', 'password': 'pistol'})
@@ -50,7 +59,9 @@ def test_register_successful(base_url):
     assert 'token' in json_response
     assert 'id' in json_response
 
+
 def test_register_unsuccessful(base_url):
+    """Проверяем регистрацию"""
 
     url = f'{base_url}/api/register'
     response = requests.post(url=url, data={'email': 'sydney@fife'})

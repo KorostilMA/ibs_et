@@ -1,3 +1,4 @@
+"""Базовый UI-тест"""
 import pytest
 import brotli
 import json
@@ -12,6 +13,9 @@ class BaseUi:
 
     @pytest.fixture(scope='module')
     def driver(self, browser_driver, base_url):
+        """Задаём для seleniumwire диапозон отслеживаемых запросов в network
+        Открываем страницу сайта из конфига"""
+
         url = f'{base_url}/api/{self.resource_name}'
         browser_driver.scopes = [f'.*{url}*']
         browser_driver.get(base_url)
@@ -19,6 +23,8 @@ class BaseUi:
 
     @pytest.fixture
     def send_request_by_button_click(self, driver):
+        """Жмём на конпку интересующего запроса"""
+
         reg_page = RequestSendingSection(driver)
         reg_page.send_request(button_label=self.button_label)
         time.sleep(1)
@@ -26,6 +32,8 @@ class BaseUi:
 
     @pytest.fixture
     def get_response_from_ui(self, driver, send_request_by_button_click):
+        """Берём из разметки страницы ответ запроса"""
+
         common = ResponseSection(driver)
         code_str = common.get_code_from_field()
         output_str = common.get_output_from_field()
@@ -33,6 +41,8 @@ class BaseUi:
 
     @pytest.fixture
     def get_response_from_network(self, driver, send_request_by_button_click):
+        """Берём ответ запроса из Network, помогает нам selenium-wire"""
+
         request_from_network = driver.requests[-1]
         response = request_from_network.response
         if response.headers.get('content-encoding') == 'br':
@@ -41,6 +51,8 @@ class BaseUi:
 
     @staticmethod
     def test_response_sameness(get_response_from_ui, get_response_from_network):
+        """Сравниваем данные, которые получили из сети, с теми,
+        что отобразились на странице"""
 
         try:
             json_body_from_ui = json.loads(get_response_from_ui[1])
