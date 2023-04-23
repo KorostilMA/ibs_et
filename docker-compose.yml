@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+  selenium-hub:
+    image: selenium/hub
+    ports:
+      - 4444:4444
+  chrome:
+    image: selenium/standalone-chrome
+    depends_on:
+      - selenium-hub
+    environment:
+      - HUB_HOST=selenium-hub
+      - HUB_PORT=4444
+      - VNC_NO_PASSWORD=1
+      - SCREEN_WIDTH=1200
+      - SCREEN_HEIGHT=675
+  test_runner:
+    build: .
+    image: korostilma/pytest_runner
+    ports:
+      - 8087:8087
+    depends_on:
+      - chrome
+    container_name: pytest_runner_works
+    volumes:
+      - .:/ibs_et/

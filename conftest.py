@@ -3,6 +3,7 @@ import pytest
 from pathlib import Path
 from seleniumwire import webdriver
 from seleniumwire.webdriver import ChromeOptions
+from seleniumwire.webdriver import DesiredCapabilities
 
 
 CONFIG_PATH = Path('config.json')
@@ -48,9 +49,19 @@ def browser_driver(config_browser, config_wait_time):
     if config_browser == 'chrome':
         chrome_options = ChromeOptions()  #
         chrome_options.add_argument("--disable-extensions")
+        chrome_options.add_argument("--ignore-certificate-errors")
         chrome_options.add_argument("--disable-gpu")
         chrome_options.add_argument("--no-sandbox")
-        driver = webdriver.Chrome(options=chrome_options)
+        chrome_options.add_argument("--disable-dev-shm-usage")
+        chrome_options.add_argument('--proxy-server=test_runner:8087')
+        driver = webdriver.Remote(command_executor='http://chrome:4444/wd/hub',
+                                  options=chrome_options,
+                                  desired_capabilities=DesiredCapabilities.CHROME,
+                                  seleniumwire_options={
+                                      'auto_config': False,
+                                      'port': 8087,  # Make sure you specify the port Selenium Wire listens on
+                                      'addr': 'test_runner'
+                                  })
     else:
         raise Exception(f'"{config_browser}" is not a supported browser')
 
